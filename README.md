@@ -1,2 +1,5 @@
-# kassite
-Scala.js tools for using Babylon.js
+# Kassite
+
+Libray for tools combining Scala and BabylonJS
+
+see https://en.wikipedia.org/wiki/Kassites
