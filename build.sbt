@@ -12,7 +12,7 @@ lazy val root = project.in(file(".")).
   )
 
 lazy val kassite = crossProject(JSPlatform, JVMPlatform).in(file("."))
-  .enablePlugins(ScalablyTypedConverterExternalNpmPlugin)
+  .enablePlugins(ScalablyTypedConverterPlugin)
   .settings(
     name := "kassite",
     version := "0.1.0",    
@@ -25,7 +25,7 @@ lazy val kassite = crossProject(JSPlatform, JVMPlatform).in(file("."))
 
     libraryDependencies += "com.jarrahtechnology" %%% "jarrah-util" % "0.6.0",
 
-    externalNpm := baseDirectory.value,
+    Compile / npmDependencies ++= Seq("babylonjs" -> "6.2.0"),
 
     Test / logBuffered := false,    
   ).

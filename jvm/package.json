@@ -1,9 +1,0 @@
-{
-  "name": "kassite",
-  "dependencies": {
-    "babylonjs": "^6.2.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.0.4"
-  }
-}
