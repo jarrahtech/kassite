@@ -12,7 +12,7 @@ lazy val root = project.in(file(".")).
   )
 
 lazy val kassite = crossProject(JSPlatform, JVMPlatform).in(file("."))
-  .enablePlugins(ScalablyTypedConverterPlugin)
+  .enablePlugins(ScalablyTypedConverterGenSourcePlugin)
   .settings(
     name := "kassite",
     version := "0.1.0",    
@@ -26,6 +26,9 @@ lazy val kassite = crossProject(JSPlatform, JVMPlatform).in(file("."))
     libraryDependencies += "com.jarrahtechnology" %%% "jarrah-util" % "0.6.0",
 
     Compile / npmDependencies ++= Seq("babylonjs" -> "6.2.0"),
+    stOutputPackage := "generated",
+    stMinimize := Selection.None,
+    Global / stQuiet := true,
 
     Test / logBuffered := false,    
   ).

@@ -3,8 +3,8 @@ package com.jarrahtechnology.kassite.shader
 import scala.scalajs.js.annotation.*
 import scala.scalajs.js
 import js.JSConverters.*
-import typings.babylonjs.*
-import typings.babylonjs.global.BABYLON as BABYLON_IMPL
+import generated.babylonjs.*
+import generated.babylonjs.global.BABYLON as BABYLON_IMPL
 
 
 // TODO: be able to change initial values?

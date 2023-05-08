@@ -2,9 +2,9 @@ package com.jarrahtechnology.kassite.shader
 
 import scala.scalajs.js.annotation.*
 import org.scalablytyped.runtime.StringDictionary
-import typings.babylonjs.anon.PartialIShaderMaterialOptAttributes
-import typings.babylonjs.*
-import typings.babylonjs.global.BABYLON as BABYLON_IMPL
+import generated.babylonjs.anon.PartialIShaderMaterialOptAttributes
+import generated.babylonjs.*
+import generated.babylonjs.global.BABYLON as BABYLON_IMPL
 
 @JSExportAll
 enum ShaderType(val storeSuffix: String, val pathKey: String) {
@@ -44,6 +44,6 @@ final case class ParameterisedShader(val vertex: VertexShader, val fragment: Fra
       .setUniformBuffers(defaults.uniformNames)
       .setSamplers(defaults.textureNames)
 
-  def toMaterial(scene: typings.babylonjs.BABYLON.Scene): ParameterisedShaderMaterial = toMaterial(scene, s"${fragment.name}_material")
-  def toMaterial(scene: typings.babylonjs.BABYLON.Scene, name: String) = ParameterisedShaderMaterial(name, scene, this)
+  def toMaterial(scene: BABYLON.Scene): ParameterisedShaderMaterial = toMaterial(scene, s"${fragment.name}_material")
+  def toMaterial(scene: BABYLON.Scene, name: String) = ParameterisedShaderMaterial(name, scene, this)
 }

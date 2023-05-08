@@ -13,3 +13,4 @@ project/project
 project/target
 /kassite/
 node_modules
+package-lock.json

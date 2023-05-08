@@ -2,7 +2,7 @@ package com.jarrahtechnology.kassite.tween
 
 import scala.scalajs.js.annotation.*
 import com.jarrahtechnology.util.Math.*
-import typings.babylonjs.*
+import generated.babylonjs.*
 import scala.collection.mutable.HashSet
 import scala.concurrent.duration.*
 
@@ -65,7 +65,7 @@ final case class Tween(val params: TweenParameters[_], val manager: TweenManager
 
 @JSExportAll
 // TODO: don't take scene, take a fn to get time (eg TweenManager.frameTime => current)
-final class TweenManager(scene: typings.babylonjs.BABYLON.Scene) {
+final class TweenManager(scene: BABYLON.Scene) {
   private val tweens: HashSet[ProgrammaticAnimation] = HashSet.empty[ProgrammaticAnimation]
   private var timeScale = 1d
 
