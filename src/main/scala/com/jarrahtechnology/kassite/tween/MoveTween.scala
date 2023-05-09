@@ -1,7 +1,7 @@
 package com.jarrahtechnology.kassite.tween
 
 import scala.scalajs.js.annotation.*
-import generated.babylonjs.*
+import typings.babylonjs.*
 import scala.concurrent.duration.*
 import com.jarrahtechnology.kassite.util.Math.*
 

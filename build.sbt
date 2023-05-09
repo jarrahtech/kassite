@@ -4,15 +4,8 @@ ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / githubOwner := "jarrahtech"
 ThisBuild / githubRepository := "kassite"
 
-lazy val root = project.in(file(".")).
-  aggregate(kassite.js, kassite.jvm).
-  settings(
-    publish := {},
-    publishLocal := {},
-  )
-
-lazy val kassite = crossProject(JSPlatform, JVMPlatform).in(file("."))
-  .enablePlugins(ScalablyTypedConverterGenSourcePlugin)
+lazy val root = project.in(file("."))
+  .enablePlugins(ScalaJSPlugin) 
   .settings(
     name := "kassite",
     version := "0.1.0",    
@@ -24,25 +17,15 @@ lazy val kassite = crossProject(JSPlatform, JVMPlatform).in(file("."))
     libraryDependencies += "org.scalatest" %%% "scalatest-funsuite" % "3.2.15" % "test",
 
     libraryDependencies += "com.jarrahtechnology" %%% "jarrah-util" % "0.6.0",
+    libraryDependencies += "com.jarrahtechnology" %%% "babylonjsfacade" % "6.2.0",
+    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % "1.1.0" % "provided",
 
-    Compile / npmDependencies ++= Seq("babylonjs" -> "6.2.0"),
-    stOutputPackage := "generated",
-    stMinimize := Selection.None,
-    Global / stQuiet := true,
-
-    Test / logBuffered := false,    
-  ).
-  jvmSettings(
     scalacOptions ++= Seq(
       "-encoding", "utf8", 
       "-Xfatal-warnings",  
       "-deprecation",
     ),
-    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % "1.1.0" % "provided",
-    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-fW", "./target/scalatest.txt"),  
-  ).
-  jsSettings(
+    
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-fW", "./target/scalatest.txt"), 
+    Test / logBuffered := false,    
   )
-
-lazy val kassiteJS = kassite.js
-lazy val kassiteJVM = kassite.jvm

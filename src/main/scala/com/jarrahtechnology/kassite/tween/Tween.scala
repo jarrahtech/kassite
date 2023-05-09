@@ -2,7 +2,7 @@ package com.jarrahtechnology.kassite.tween
 
 import scala.scalajs.js.annotation.*
 import com.jarrahtechnology.util.Math.*
-import generated.babylonjs.*
+import typings.babylonjs.*
 import scala.collection.mutable.HashSet
 import scala.concurrent.duration.*
 

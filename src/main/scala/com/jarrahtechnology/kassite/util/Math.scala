@@ -1,8 +1,8 @@
 package com.jarrahtechnology.kassite.util
 
 import scala.scalajs.js.annotation.*
-import generated.babylonjs.*
-import generated.babylonjs.global.BABYLON as BABYLON_IMPL
+import typings.babylonjs.*
+import typings.babylonjs.global.BABYLON as BABYLON_IMPL
 import com.jarrahtechnology.util.Interpolation.*
 
 @JSExportAll

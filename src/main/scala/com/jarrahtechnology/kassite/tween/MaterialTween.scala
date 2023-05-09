@@ -1,12 +1,12 @@
 package com.jarrahtechnology.kassite.tween
 
 import scala.scalajs.js.annotation.*
-import generated.babylonjs.*
-import generated.babylonjs.global.BABYLON as BABYLON_IMPL
+import typings.babylonjs.*
+import typings.babylonjs.global.BABYLON as BABYLON_IMPL
 import scala.concurrent.duration.*
 import com.jarrahtechnology.kassite.shader.*
-import com.jarrahtechnology.util.Interpolation.*
-import com.jarrahtechnology.kassite.util.Math.*
+import com.jarrahtechnology.util.Interpolation.lerp
+import com.jarrahtechnology.kassite.util.Math.color3lerp
 
 @JSExportAll
 final case class MaterialColor3TweenParameters(d: Duration, val mat: BABYLON.ShaderMaterial, val name: String, val dest: BABYLON.Color3, val origin: BABYLON.Color3) 

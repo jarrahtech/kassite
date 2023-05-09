@@ -2,9 +2,9 @@ package com.jarrahtechnology.kassite.shader
 
 import scala.scalajs.js.annotation.*
 import org.scalablytyped.runtime.StringDictionary
-import generated.babylonjs.anon.PartialIShaderMaterialOptAttributes
-import generated.babylonjs.*
-import generated.babylonjs.global.BABYLON as BABYLON_IMPL
+import typings.babylonjs.anon.PartialIShaderMaterialOptAttributes
+import typings.babylonjs.*
+import typings.babylonjs.global.BABYLON as BABYLON_IMPL
 
 @JSExportAll
 enum ShaderType(val storeSuffix: String, val pathKey: String) {
