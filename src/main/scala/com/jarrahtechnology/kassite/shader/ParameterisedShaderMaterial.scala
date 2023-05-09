@@ -3,11 +3,10 @@ package com.jarrahtechnology.kassite.shader
 import scala.scalajs.js.annotation.*
 import scala.scalajs.js
 import js.JSConverters.*
-import typings.babylonjs.*
-import typings.babylonjs.global.BABYLON as BABYLON_IMPL
+import facade.babylonjs.*
+import facade.babylonjs.global.BABYLON as BABYLON_IMPL
 
 // TODO: be able to change initial values?
-@JSExportTopLevel("ParameterisedShaderMaterial")
 final class ParameterisedShaderMaterial(name: String, scene: BABYLON.Scene, shader: ParameterisedShader) extends BABYLON_IMPL.ShaderMaterial(name, scene, shader.toShaderPath, shader.toShaderOpts) {
   private val params = collection.mutable.Map.from(shader.defaults.map(p => (p.name -> p.initialValue)))
   shader.defaults.foreach(_.setInitial(this))

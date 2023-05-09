@@ -1,8 +1,8 @@
 package com.jarrahtechnology.kassite.tween
 
 import scala.scalajs.js.annotation.*
-import typings.babylonjs.*
-import typings.babylonjs.global.BABYLON as BABYLON_IMPL
+import facade.babylonjs.*
+import facade.babylonjs.global.BABYLON as BABYLON_IMPL
 import scala.concurrent.duration.*
 import com.jarrahtechnology.kassite.shader.*
 import com.jarrahtechnology.util.Interpolation.lerp
@@ -22,10 +22,10 @@ final case class MaterialFloatTweenParameters(d: Duration, w: Duration, mat: BAB
 
 @JSExportAll 
 object MaterialTween {
-    def shaderColor3Parameter(duration: Duration, mat: BABYLON.ShaderMaterial, name: String, dest: BABYLON.Color3, origin: BABYLON.Color3) = 
+  def shaderColor3Parameter(duration: Duration, mat: BABYLON.ShaderMaterial, name: String, dest: BABYLON.Color3, origin: BABYLON.Color3) = 
         MaterialColor3TweenParameters(duration, mat, name, dest, origin) 
-    def shaderColor3Parameter(duration: Duration, mat: ParameterisedShaderMaterial, name: String, dest: BABYLON.Color3) = 
+  def shaderColor3Parameter(duration: Duration, mat: ParameterisedShaderMaterial, name: String, dest: BABYLON.Color3) = 
         ParamMaterialColor3TweenParameters(duration, mat, name, dest, mat.getColor3(name).getOrElse(BABYLON_IMPL.Color3(1,1,1)))
-    def shaderFloatParameter(duration: Duration, delay: Duration, mat: ParameterisedShaderMaterial, name: String, dest: Double, onStart: Option[MaterialFloatTweenParameters => Unit], onFinish: Option[MaterialFloatTweenParameters => Unit]) = 
+  def shaderFloatParameter(duration: Duration, delay: Duration, mat: ParameterisedShaderMaterial, name: String, dest: Double, onStart: Option[MaterialFloatTweenParameters => Unit], onFinish: Option[MaterialFloatTweenParameters => Unit]) = 
         MaterialFloatTweenParameters(duration, delay, mat, name, dest, mat.getFloat(name).getOrElse(0d), onStart, onFinish) 
 }

@@ -1,7 +1,7 @@
 package com.jarrahtechnology.kassite.shader
 
 import scala.scalajs.js.annotation.*
-import typings.babylonjs.*
+import facade.babylonjs.*
 import scala.scalajs.*
 
 @JSExportAll

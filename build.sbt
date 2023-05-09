@@ -8,7 +8,7 @@ lazy val root = project.in(file("."))
   .enablePlugins(ScalaJSPlugin) 
   .settings(
     name := "kassite",
-    version := "0.1.0",    
+    version := "0.1.1",    
 
     resolvers ++= Resolver.sonatypeOssRepos("public"),
     resolvers += Resolver.githubPackages("jarrahtech"),
