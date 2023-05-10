@@ -5,20 +5,31 @@ import com.jarrahtechnology.util.Math.*
 import facade.babylonjs.*
 import scala.collection.mutable.HashSet
 import scala.concurrent.duration.*
+import scala.util.chaining._
+
+trait ZZZ {
+  def action: Double => Unit
+  def runOn(manager: TweenManager): Tween
+}
 
 @JSExportAll
 // TODO: think about delay end and  builder
-trait TweenParameters[T <: TweenParameters[_]](val duration: Duration, action: Double => Unit, val loop: LoopType, val ease: EaseType, val delay: Duration, val onStart: Option[T => Unit], val onFinish: Option[T => Unit]) {
+trait TweenParameters[T <: TweenParameters[_]](val duration: Duration, val action: Double => Unit, val loop: LoopType, val ease: EaseType, val delay: Duration, val onStart: Option[T => Unit], val onFinish: Option[T => Unit]) 
+{ //extends ZZZ {
   require(duration>Duration.Zero, s"duration=${duration} !> 0")
 
   val updateTweenWith = loop.progress(duration) andThen clamp01 andThen ease.method andThen action
   val hasFinishedAfter = loop.hasFinished(duration)
   def fireFinished = onFinish.foreach(_(this.asInstanceOf[T]))
   def fireStarted = onStart.foreach(_(this.asInstanceOf[T]))
-  def runOn(manager: TweenManager) = manager.run(this)
+  def runOn(manager: TweenManager) = InterpTween(this, manager).tap(manager.run)
 }
 
-trait ProgrammaticAnimation {
+//trait DeltaTweenParameters() extends ZZZ {
+//  def runOn(manager: TweenManager) = DeltaTween(this, manager).tap(manager.run)
+//}
+
+trait Tween {
   protected var timeScale = 1d
 
   def manager: TweenManager
@@ -36,15 +47,13 @@ trait ProgrammaticAnimation {
 // TODO: check traits do not use parameter lists, but defs instead!!!! check all libs
 // TODO: can this be subsumed by Tween? If not generalise better (names/functions), have runOn
 @JSExportAll
-final case class DeltaProgrammaticAnimation(action: Duration => Unit, val manager: TweenManager) extends ProgrammaticAnimation {
+final case class DeltaTween(action: Duration => Unit, val manager: TweenManager) extends Tween {
   def update(delta: Duration) = action(delta*timeScale)
   def start = if (!manager.manages(this)) manager.run(this)
 }
-// TODO: set as private and force construction through object with runOn?
-// TODO: Tween <- DeltaTween, InterpTween
 
 @JSExportAll
-final case class Tween(val params: TweenParameters[_], val manager: TweenManager) extends ProgrammaticAnimation {
+final case class InterpTween(val params: TweenParameters[_], val manager: TweenManager) extends Tween {
   private var runTime = -params.delay
 
   def update(delta: Duration) = {
@@ -57,30 +66,25 @@ final case class Tween(val params: TweenParameters[_], val manager: TweenManager
   def progressTime = runTime
   override def stop = { params.fireFinished; super.stop }
   def restart = { runTime = -params.delay; if (!manager.manages(this)) manager.run(this); this } 
-  def syncTo(other: Tween) = { 
+  def syncTo(other: InterpTween) = { 
     runTime = params.duration * LoopType.loopForwardFromStart(other.params.duration)(other.runTime)
     timeScale = other.timeScale
   }
 }
 
 @JSExportAll
-// TODO: don't take scene, take a fn to get time (eg TweenManager.frameTime => current)
-final class TweenManager(scene: BABYLON.Scene) {
-  private val tweens: HashSet[ProgrammaticAnimation] = HashSet.empty[ProgrammaticAnimation]
+final class TweenManager(scene: BABYLON.Scene, deltaFn: BABYLON.Scene => Duration) {
+  private val tweens: HashSet[Tween] = HashSet.empty[Tween]
   private var timeScale = 1d
 
-  scene.onBeforeRenderObservable.add((sc, ev) => {
-    val delta = Duration((scene.getDeterministicFrameTime()*1000).toLong, MICROSECONDS)
-    tweens.foreach(_.update(delta))
-  })
+  scene.onBeforeRenderObservable.add((sc, ev) => tweens.foreach(_.update(deltaFn(scene))))
 
   // Could do the next two lines in one with generics, but scala-js doesn't seem to like that at runtime :(
-  def run(t: Tween): Tween = { if (t.manager == this) tweens.add(t); t }
-  def run(t: DeltaProgrammaticAnimation): DeltaProgrammaticAnimation = { if (t.manager == this) tweens.add(t); t } 
-  def run(params: TweenParameters[_]): Tween = {val t = Tween(params, this); run(t) }
+  def run(t: InterpTween) = if (t.manager == this) tweens.add(t)
+  def run(t: DeltaTween): DeltaTween = { if (t.manager == this) tweens.add(t); t } 
   
-  def remove(tween: ProgrammaticAnimation) = tweens.remove(tween)
-  def manages(tween: ProgrammaticAnimation) = tweens.exists(_ == tween)
+  def remove(tween: Tween) = tweens.remove(tween)
+  def manages(tween: Tween) = tweens.exists(_ == tween)
 
   def setTimeScale(s: Double) = { require(timeScale>=0, s"speed=${timeScale} !>= 0"); timeScale = s }
   def getTimeScale = timeScale
@@ -89,4 +93,6 @@ final class TweenManager(scene: BABYLON.Scene) {
   def isPaused = timeScale==0
 }
 
-// TODO: path move, composite, alpha, look to/face, shake, punch
+object TweenManager {
+  def frameTime(scene: BABYLON.Scene) = TweenManager(scene, s => Duration((s.getDeterministicFrameTime()*1000).toLong, MICROSECONDS))
+}
