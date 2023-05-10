@@ -1,7 +1,10 @@
 # Kassite
 
-Library for tools combining Scala and BabylonJS
+Library for tools combining Scala.js and Babylon.js.
 
-see https://en.wikipedia.org/wiki/Kassites
+[Etymology](https://en.wikipedia.org/wiki/Kassites)
 
-// TODO: tweens for: path move, composite, alpha, look to/face, shake, punch
+## Todo
+
+* tweens for: path move, composite, alpha, look to/face, shake, punch
+* extract params directly from shader code

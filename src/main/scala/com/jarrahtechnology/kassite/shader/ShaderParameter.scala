@@ -60,8 +60,9 @@ final case class ShaderParams(params: Seq[ShaderParameter[_]]) extends Iterable[
   lazy val textureNames = collectNames(ShaderParamType.Texture)
 }
 
+/*
 @JSExportAll
 object ShaderParams {
-  // TODO: extract params from shader code
-  //def derive(code: String) = ???
+  def derive(code: String): ShaderParams = ???
 }
+*/

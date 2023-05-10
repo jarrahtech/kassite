@@ -8,24 +8,34 @@ import com.jarrahtechnology.kassite.shader.*
 import com.jarrahtechnology.util.Interpolation.lerp
 import com.jarrahtechnology.kassite.util.Math.color3lerp
 
-@JSExportAll
-final case class MaterialColor3TweenParameters(d: Duration, val mat: BABYLON.ShaderMaterial, val name: String, val dest: BABYLON.Color3, val origin: BABYLON.Color3) 
-  extends TweenParameters[MaterialColor3TweenParameters](d, v => mat.setColor3(name, color3lerp(v, origin, dest)), LoopType.PingPongForever, EaseType.Sigmoid, Duration.Zero, None, None)
-@JSExportAll
-final case class ParamMaterialColor3TweenParameters(d: Duration, val mat: ParameterisedShaderMaterial, val name: String, val dest: BABYLON.Color3, val origin: BABYLON.Color3) 
-  extends TweenParameters[ParamMaterialColor3TweenParameters](d, v => mat.setColor3(name, color3lerp(v, origin, dest)), LoopType.PingPongForever, EaseType.Sigmoid, Duration.Zero, None, Some(_ => mat.setColor3(name, origin)))
-@JSExportAll
-final case class MaterialFloatTweenParameters(d: Duration, w: Duration, mat: BABYLON.ShaderMaterial, val name: String, val dest: Double, val origin: Double, start: Option[MaterialFloatTweenParameters => Unit], finish: Option[MaterialFloatTweenParameters => Unit]) 
-  extends TweenParameters[MaterialFloatTweenParameters](d, v => mat.setFloat(name, lerp(v, origin, dest)), LoopType.Once, EaseType.Sigmoid, w, start, finish)
-
 // Can't share materials without them all changing, except at start, see https://www.babylonjs-playground.com/#2IFRKC#251
 
 @JSExportAll 
 object MaterialTween {
   def shaderColor3Parameter(duration: Duration, mat: BABYLON.ShaderMaterial, name: String, dest: BABYLON.Color3, origin: BABYLON.Color3) = 
-        MaterialColor3TweenParameters(duration, mat, name, dest, origin) 
-  def shaderColor3Parameter(duration: Duration, mat: ParameterisedShaderMaterial, name: String, dest: BABYLON.Color3) = 
-        ParamMaterialColor3TweenParameters(duration, mat, name, dest, mat.getColor3(name).getOrElse(BABYLON_IMPL.Color3(1,1,1)))
-  def shaderFloatParameter(duration: Duration, delay: Duration, mat: ParameterisedShaderMaterial, name: String, dest: Double, onStart: Option[MaterialFloatTweenParameters => Unit], onFinish: Option[MaterialFloatTweenParameters => Unit]) = 
-        MaterialFloatTweenParameters(duration, delay, mat, name, dest, mat.getFloat(name).getOrElse(0d), onStart, onFinish) 
+    InterpTweenBuilder()
+      .withAction(v => mat.setColor3(name, color3lerp(v, origin, dest)))
+      .withDuration(duration)
+      .withLoop(LoopType.PingPongForever)
+      .build()
+  
+  def shaderColor3ParameterFromTo(duration: Duration, mat: ParameterisedShaderMaterial, name: String, origin: BABYLON.Color3, dest: BABYLON.Color3) = 
+    InterpTweenBuilder()
+      .withAction(v => mat.setColor3(name, color3lerp(v, origin, dest)))
+      .withDuration(duration)
+      .withLoop(LoopType.PingPongForever)
+      .withOnFinish(_ => mat.setColor3(name, origin))
+      .build()
+  def shaderColor3ParameterTo(duration: Duration, mat: ParameterisedShaderMaterial, name: String, dest: BABYLON.Color3) = 
+      shaderColor3ParameterFromTo(duration, mat, name, mat.getColor3(name).getOrElse(BABYLON_IMPL.Color3(1,1,1)), dest)
+  
+  def shaderFloatParameterFromTo(duration: Duration, delay: Duration, mat: ParameterisedShaderMaterial, name: String, origin: Double, dest: Double, onStart: Option[InterpTweenParameters => Unit], onFinish: Option[InterpTweenParameters => Unit]) = 
+    InterpTweenBuilder()
+      .withAction(v => mat.setFloat(name, lerp(v, origin, dest)))
+      .withDuration(duration)
+      .withOnStart(onStart)
+      .withOnFinish(onFinish)
+      .build()
+  def shaderFloatParameter(duration: Duration, delay: Duration, mat: ParameterisedShaderMaterial, name: String, dest: Double, onStart: Option[InterpTweenParameters => Unit], onFinish: Option[InterpTweenParameters => Unit]) = 
+      shaderFloatParameterFromTo(duration, delay, mat, name, mat.getFloat(name).getOrElse(0d), dest, onStart, onFinish) 
 }
