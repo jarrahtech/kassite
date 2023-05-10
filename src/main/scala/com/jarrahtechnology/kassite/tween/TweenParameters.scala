@@ -42,6 +42,7 @@ final case class InterpTweenBuilder (
   def withOnFinish(onFinish: InterpTweenParameters => Unit): InterpTweenBuilder = withOnFinish(Some(onFinish))
 
   def build() = InterpTweenParameters(action, duration, loop, ease, delay, onStart, onFinish)
+  def runOn(mgr: TweenManager) = build().runOn(mgr)
 }
 
 final case class DeltaTweenParameters(val action: Duration => Unit) extends TweenParameters {

@@ -8,3 +8,4 @@ Library for tools combining Scala.js and Babylon.js.
 
 * tweens for: path move, composite, alpha, look to/face, shake, punch
 * extract params directly from shader code
+* add to ShaderMaterial: needAlphaBlending: true & shaderMaterial.backFaceCulling = false;
