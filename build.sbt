@@ -8,7 +8,7 @@ lazy val root = project.in(file("."))
   .enablePlugins(ScalaJSPlugin) 
   .settings(
     name := "kassite",
-    version := "0.1.3",    
+    version := "0.1.4",    
 
     resolvers ++= Resolver.sonatypeOssRepos("public"),
     resolvers += Resolver.githubPackages("jarrahtech"),
@@ -16,8 +16,9 @@ lazy val root = project.in(file("."))
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.15" % "test",
     libraryDependencies += "org.scalatest" %%% "scalatest-funsuite" % "3.2.15" % "test",
 
-    libraryDependencies += "com.jarrahtechnology" %%% "jarrah-util" % "0.6.0",
-    libraryDependencies += "com.jarrahtechnology" %%% "babylonjsfacade" % "6.2.0",
+    //libraryDependencies += "com.jarrahtechnology" %%% "hex" % "0.3.3",
+    libraryDependencies += "com.jarrahtechnology" %%% "jarrah-util" % "0.7.0",
+    libraryDependencies += "com.jarrahtechnology" %%% "babylonjsfacade" % "6.14.1",
     libraryDependencies += "org.scala-js" %% "scalajs-stubs" % "1.1.0" % "provided",
 
     scalacOptions ++= Seq(

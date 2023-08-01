@@ -8,7 +8,7 @@ type ProgressFn = Duration => Duration => Double
 type FinishedFn = Duration => Duration => Boolean
 
 @JSExportAll
-class LoopType(val progress: ProgressFn, val hasFinished: FinishedFn)
+trait LoopType(val progress: ProgressFn, val hasFinished: FinishedFn)
 
 @JSExportAll
 object LoopType {
