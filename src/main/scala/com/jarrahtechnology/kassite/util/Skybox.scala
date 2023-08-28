@@ -17,5 +17,6 @@ object Skybox {
     skyboxMaterial.diffuseColor = BABYLON_IMPL.Color3(0, 0, 0)
     skyboxMaterial.specularColor = BABYLON_IMPL.Color3.Black()
     skybox.material = skyboxMaterial
+    skybox.isPickable = false
   }
 }

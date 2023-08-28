@@ -3,11 +3,13 @@ package com.jarrahtechnology.kassite.controls
 import util.chaining.scalaUtilChainingOps
 import facade.babylonjs.*
 import facade.babylonjs.global.BABYLON as BABYLON_IMPL
+import com.jarrahtechnology.kassite.tooltips.TooltipManager
 
 final class ControlManager() {
   private val inputs = collection.mutable.HashMap.empty[InputDef, String]
   private val controls = collection.mutable.HashMap.empty[String, InputControl[?]]
   private var detachfn = Option.empty[() => Unit]
+  var tooltipMgr = Option.empty[TooltipManager]
 
   def addControl(ctrls: InputControl[?]*) = ctrls.map(c => controls.addOne(c.name -> c))
   def forceUpdateInput(input: (InputDef, InputControl[?])*) = input.foreach(in => controls.get(in._2.name).foreach(c => inputs.update(in._1, c.name)))
@@ -27,7 +29,7 @@ final class ControlManager() {
   def find(input: InputDef) = inputs.get(input).flatMap(controls.get)
 
   // Stop browser events with preventDefault() (see https://doc.babylonjs.com/features/featuresDeepDive/cameras/customizingCameraInputs)
-  val mouseEvent = (pInfo: BABYLON.PointerInfo, evState: BABYLON.EventState) => {
+  val mouseEvent = (pInfo: BABYLON.PointerInfo, evState: BABYLON.EventState) => if (tooltipMgr.map(_.handleUi(pInfo)).getOrElse(true)) {
     if (pInfo.event.movementX!=0 || pInfo.event.movementY!=0) find(MousePositionInputDef.from(pInfo.event)).foreach(c => c.start(c.convertor.convert(pInfo)))
     if (pInfo.`type` == BABYLON_IMPL.PointerEventTypes.POINTERDOWN) find(MouseButtonInputDef.from(pInfo.event)).foreach(c => c.start(c.convertor.convert(pInfo)))
     else if (pInfo.`type` == BABYLON_IMPL.PointerEventTypes.POINTERUP) find(MouseButtonInputDef.from(pInfo.event)).foreach(c => c.end(c.convertor.convert(pInfo)))
